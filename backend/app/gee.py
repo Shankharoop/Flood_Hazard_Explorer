@@ -13,7 +13,7 @@ import os
 from app.config import PROJECT_ID
 
 ## Initialize GEE
-ee.Authenticate()
+# ee.Authenticate()
 ee.Initialize(
     project = PROJECT_ID,
     opt_url = "https://earthengine-highvolume.googleapis.com"
@@ -34,8 +34,7 @@ def flood_hazard_mapper(latitude, longitude, buffer_distance_m, return_period):
 
     # Filter by RP and mosaic and clip
     flood_ras = (
-        jrc.filterBounds(roi)
-           .filter(ee.Filter.eq("return_period", return_period))
+        jrc.filter(ee.Filter.eq("return_period", return_period))
            .mosaic()
            .clip(roi)
     )

@@ -1,8 +1,9 @@
 const map = L.map("map");
+const BACKEND_URL = "http://127.0.0.1:8000";
 
 map.setView(
   [30.390129989353866, 78.07640405039741],
-  8
+  12
 );
 
 
@@ -14,7 +15,7 @@ L.tileLayer(
       "&copy; OpenStreetMap contributors"
   }
 )
-.addTo(map)
+.addTo(map);
 
 // Create the INFO PANEL
 const infoControl = L.control({position: "topright"});
@@ -39,8 +40,10 @@ infoControl.onAdd = function(map) {
         Developed by
         Dr. Shankharoop Ghoshal/U-PREPARE/WORLDBANK.
         Dataset: JRC/GloFAS.
-        Model: OS-LISFLOOD.
+        Models: OS-LISFLOOD and LISFLOOD-FP
+        </p>
 
+        <p>
         To Run: First select the Return Period,
         then Right Click on any River/Stream Area.
         Refresh browser to restart.
@@ -89,21 +92,15 @@ function(e){
 });
 
 
-
-
-
-
-
-
 // Click Event
 let floodLayer = null;
 
 map.on(
     "contextmenu",
-    function(event) {
+    function(e) {
 
-        const lat = event.latlng.lat;
-        const lon = event.latlng.lng;
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
 
         let period = document.getElementById("returnPeriod").value;
 
@@ -117,7 +114,7 @@ map.on(
 
 
         fetch(
-            `http://127.0.0.1:8000/flood?lat=${lat}&lon=${lon}&distance=5000&&rp=${period}`
+            `${BACKEND_URL}/flood?lat=${lat}&lon=${lon}&distance=5000&rp=${period}`
         )
 
         .then(response => response.json())
